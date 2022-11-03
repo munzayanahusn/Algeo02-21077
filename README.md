@@ -13,7 +13,7 @@ QnA         : https://bit.ly/DataTubes2AlgeoXXII
 SUBMISI     : https://bit.ly/SubmitTubes2Algeo
 <br>
 
-REFERENSI :
+REFERENSI : <br>
 OpenCV            : https://bit.ly/DataTubes2AlgeoXXII <br>
 EigenFace         : https://jurnal.untan.ac.id/index.php/jcskommipa/article/download/9727/9500 <br>
                     https://www.geeksforgeeks.org/ml-face-recognition-using-eigenfaces-pca-algorithm/ <br>
