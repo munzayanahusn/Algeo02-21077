@@ -11,13 +11,13 @@ def picExtract(dir):
     return ar
 
 
-dir = r"D:\PROGRAM KULIAH\TUBES ALGEO 2\Algeo02-21077\test\dataset\5pixel.jpg"
+dir = "../test/dataset/5pixel.jpg"
 arrayPic = picExtract(dir)
 print(arrayPic)
 
 # List of name file
 filename_list = glob(os.path.join(
-    r"D:\PROGRAM KULIAH\TUBES ALGEO 2\Algeo02-21077\test\dataset", "*.jpg"))
+    r"test/dataset\\", "*.jpg"))
 
 for filename in filename_list:
     print(filename)
