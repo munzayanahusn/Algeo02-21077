@@ -4,6 +4,8 @@
 
 GITHUB      : https://github.com/munzayanahusn/Algeo02-21077.git
 <br>
+PROGRESS    : https://docs.google.com/document/d/1MR4CVEdj-aEkqGHDWCFWQ1I6XtWMzkE628MIL3aXyZM/edit?usp=sharing
+<br>
 LAPORAN     : 
 
 SPESIFIKASI : https://informatika.stei.itb.ac.id/~rinaldi.munir/AljabarGeometri/2022-2023/Tubes2-Algeo-2022.pdf
