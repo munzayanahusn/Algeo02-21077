@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.linalg
 import imageExt
 
 global mean
@@ -63,18 +64,99 @@ def matrixA(arr):
     # print(A)
     return A
 
-def eigenvector(arrA):
-    Caksen = np.matmul(np.array(arrA).transpose(), arrA)
+def QRdec(arr):
+    n = len(arr)
+    Q = np.empty((n, n)) 
+    u = np.empty((n, n)) 
+    u[:, 0] = arr[:, 0]
+    Q[:, 0] = u[:, 0] / np.linalg.norm(u[:, 0])
+    for i in range(1, n):
+        u[:, i] = arr[:, i]
+        for j in range(i):
+            u[:, i] -= (arr[:, i] @ Q[:, j]) * Q[:, j]
+        Q[:, i] = u[:, i] / np.linalg.norm(u[:, i])
+    R = np.zeros((n, n))
+    for i in range(n):
+        for j in range(i, n):
+            R[i, j] = arr[:, j] @ Q[:, i]
+    return Q, R
+def diag_sign(A):
+    "Compute the signs of the diagonal of matrix A"
+
+    D = np.diag(np.sign(np.diag(A)))
+
+    return D
+
+def adjust_sign(Q, R):
+    """
+    Adjust the signs of the columns in Q and rows in R to
+    impose positive diagonal of Q
+    """
+
+    D = diag_sign(Q)
+
+    Q[:, :] = Q @ D
+    R[:, :] = D @ R
+
+    return Q, R
+
+def eigenvector(C):
+    # C = np.matmul(np.array(arrA).transpose(), arrA)
+    n = len(C)
+    '''
     print("C aksen")
-    print("len", len(Caksen))
-    print("len[0]",len(Caksen[0]))
-    print(Caksen)
-
-    Lamb = x*np.identity(len(Caksen))
-
+    print("len", len(C))
+    print("len[0]",len(C[0]))
+    print(C)
+    '''
+    C0 = np.copy(C)
+    C1 = np.copy(C)
+    diff = np.inf
+    i = 0
+    while (diff > 1e-12) and (i < 1000):
+        C0[:, :] = C1
+        Q, R = adjust_sign(*QRdec(C0))
+        C1[:, :] = R @ Q
+        diff = np.abs(C1 - C0).max()
+        i += 1
+    eigvals = np.diag(C1)
+    print("eigvals:")
+    print(eigvals)
+    a = np.empty((len(eigvals), n, n)) 
+    x = [[[0 for k in range (n)] for j in range (100)] for i in range (len(eigvals))]
+    print(np.shape(x[0]))
+    print(np.shape(x))
+    for i in range (0, len(eigvals)):
+        a[i] = np.subtract(np.multiply(np.identity(n), eigvals[i]), C)
+        print(a[i])
+        x[i] = scipy.linalg.null_space(a[i])
+        print(x[i])
+        print("\n")
+    '''
+    l = 0
+    for k in range(len(eigvals)):
+        for j in range (n):
+            for i in range (100):
+                if(not np.any(x[k][j][i])):
+                    l += 1
+    v = np.empty((l, n))
+    l = 0
+    for k in range(len(eigvals)):
+        for j in range (n):
+            for i in range (100):
+                if(not np.any(x[k][j][i])):
+                    v[l] = 
+                    l += 1
+    '''
 
 imageExt.listOfPicExtract("../test/dataset//")
 # convertARow(imageExt.arrPic)
 arr = convertARow(imageExt.arrPic)
-nilaiTengah(arr)
-eigenvector(matrixA(selisih(mean, arr)))
+#nilaiTengah(arr)
+#eigenvector(matrixA(selisih(mean, arr)))
+C = ([[ 3,  -2,  0],
+       [ -2,  3,  0],
+       [ 0,  0,  5]])
+D = ([[ 3,  0],
+      [ 8,  -1]])
+eigenvector(C)
