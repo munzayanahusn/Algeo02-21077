@@ -18,19 +18,20 @@ def convertARow(arr):
 
 
 def nilaiTengah(arr):
-    for i in range(0,len(arr[0])):
+    for i in range(0, len(arr[0])):
         sum = 0
-        for k in range(0,len(arr)):
+        for k in range(0, len(arr)):
             sum += arr[k][i]
-            
+
             # print("mean", sum/len(arr))
         mean.append(sum/len(arr))
-    
+
     print(mean)
     # print(mean)
 
+
 def selisih(arrmean, arr):
-    diff=[]
+    diff = []
     '''
     print("Selisih")
     print("len mean", len(arrmean))
@@ -43,7 +44,7 @@ def selisih(arrmean, arr):
             elmt = arr[k][i]-arrmean[i]
             temp.append(elmt)
         diff.append(temp)
-    
+
     '''
     print("Selisih")
     print("len", len(diff))
@@ -52,6 +53,7 @@ def selisih(arrmean, arr):
     '''
 
     return diff
+
 
 def matrixA(arr):
     A = []
@@ -63,14 +65,13 @@ def matrixA(arr):
     # print(A)
     return A
 
+
 def eigenvector(arrA):
     Caksen = np.matmul(np.array(arrA).transpose(), arrA)
     print("C aksen")
     print("len", len(Caksen))
-    print("len[0]",len(Caksen[0]))
+    print("len[0]", len(Caksen[0]))
     print(Caksen)
-
-    Lamb = x*np.identity(len(Caksen))
 
 
 imageExt.listOfPicExtract("../test/dataset//")
