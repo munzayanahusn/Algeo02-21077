@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.linalg
 import imageExt
+from PIL import Image
 
 global mean
 mean = []
@@ -107,15 +108,19 @@ def adjust_sign(Q, R):
     return Q, R
 
 
-def eigenvector(C):
-    # C = np.matmul(np.array(arrA).transpose(), arrA)
+def eigenvector(arrA):
+    C = np.matmul(np.array(arrA).transpose(), arrA)
+    img = Image.fromarray(C, mode='L')
+    img.save ('covarian.png')
+    img.show()
     n = len(C)
+
     '''
     print("C aksen")
     print("len", len(C))
     print("len[0]",len(C[0]))
     print(C)
-    '''
+    
     C0 = np.copy(C)
     C1 = np.copy(C)
     diff = np.inf
@@ -140,7 +145,7 @@ def eigenvector(C):
         x[i] = scipy.linalg.null_space(a[i])
         print(x[i])
         print("\n")
-    '''
+    
     l = 0
     for k in range(len(eigvals)):
         for j in range (n):
@@ -161,16 +166,17 @@ def eigenvector(C):
 imageExt.listOfPicExtract("../test/dataset//")
 # convertARow(imageExt.arrPic)
 arr = convertARow(imageExt.arrPic)
-<< << << < HEAD
+
 nilaiTengah(arr)
 eigenvector(matrixA(selisih(mean, arr)))
-== == == =
+
+'''
 # nilaiTengah(arr)
-#eigenvector(matrixA(selisih(mean, arr)))
+# eigenvector(matrixA(selisih(mean, arr)))
 C = ([[3,  -2,  0],
       [-2,  3,  0],
       [0,  0,  5]])
 D = ([[3,  0],
       [8,  -1]])
 eigenvector(C)
->>>>>> > 7cf0db6ecd58dbb16cc66322f0b3258fd9340c26
+'''
