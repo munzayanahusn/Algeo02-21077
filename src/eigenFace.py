@@ -64,7 +64,7 @@ def selisih(arrmean, arr):
             elmt = arr[i][j]-arrmean[i]
             temp.append(elmt)
         diff.append(temp)
-    
+
     '''
     for i in range(0, len(diff[0])):
         temp = []
@@ -82,7 +82,7 @@ def selisih(arrmean, arr):
     print("Selisih")
     # print(diff)
     print("len", len(diff))
-    print("len[0]",len(diff[0]))
+    print("len[0]", len(diff[0]))
 
     return diff
 
@@ -107,19 +107,31 @@ def eigenvector(arrA):
     print(len(arrA[0]))
     # Mencari matriks covarian C = transpose(A) x A
     At = np.array(arrA).transpose()
-    print("At")
-    print(At)
+    # print("At")
+    # print(At)
     C = np.matmul(At, arrA)
-    print("Covarian")
-    print(C)
+    # print("Covarian")
+    # print(C)
+    
     img = Image.fromarray(np.uint8(C), mode='L')
     img.save('../test/tryset/covarian.png')
     print(img.size)
-    
+
+    '''
     (eigval, eigvector) = np.linalg.eig(C)
     print("---")
     print(eigval)
-    '''
+
+    temp = np.hsplit(eigvector, 1)
+    for i in range(0, len(temp)):
+        eigface = np.matmul(arrA, temp[i])
+        eigface.reshape(eigface,(256,256,-1))
+
+        dir = '../test/tryset/face' + str(i) + '.png'
+        img = Image.fromarray(np.uint8(eigface), mode='L')
+        img.save(dir)
+
+    ''
     eigface = np.matmul(eigvector, At)
     for i in range(0, len(eigface[0])):
         temp = []
