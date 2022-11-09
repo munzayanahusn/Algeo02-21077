@@ -1,4 +1,5 @@
 
+from turtle import xcor
 import numpy as np
 import scipy.linalg
 import imageExt
@@ -66,9 +67,9 @@ def matrixA(arr):
     return A
 
 
-# Ini nyari eig vector yg pake QR tapi masih bingung misah2in eig vector yg dari nullspace scipy nya
+# Ini nyari eig vector yg pake QR
 # trus setelah diliat2 lagi kyknya cuma perlu K eig value terbesar gitu kan jadi nyoba power method
-'''
+
 def Q_i(Q_min, i, j, k):
     if i < k or j < k:
         return float(i == j)
@@ -97,11 +98,12 @@ def QRDec(A):
 def eigenvector(C):
     # C = np.matmul(np.array(arrA).transpose(), arrA)
     n = len(C)
-
+    '''
     print("C aksen")
     print("len", len(C))
     print("len[0]",len(C[0]))
     print(C)
+    '''
     C1 = np.copy(C)
     n = len(C)
     QQ = np.identity(n)
@@ -111,21 +113,23 @@ def eigenvector(C):
         QQ = QQ @ Q
     eigvals = np.diag(C1)
     a = np.empty((len(eigvals), n, n)) 
-    x = [[[0 for k in range (n)] for j in range (100)] for i in range (len(eigvals))]
+    #x = [[[0 for k in range (n)] for j in range (100)] for i in range (len(eigvals))]
     #x = np.empty((len(eigvals), n, n))
     cntv = 0
+    eigvecs = np.empty((n, 1))
+    countsplit = 1
     for i in range (0, len(eigvals)):
         a[i] = np.subtract(np.multiply(np.identity(n), eigvals[i]), C)
-        print(eigvals[i])
-        print(a[i])
-        x[i] = scipy.linalg.null_space(a[i])
-        print(x[i])
-        a, b = np.shape(x[i])
-        print(a, b)
-        np.hsplit(x[i], b)
-        print(x[i])
-        #cntv += b
-'''
+        x = scipy.linalg.null_space(a[i])
+        b, c = np.shape(x)
+        if(c > 0): 
+            countsplit += 1
+            x = np.hsplit(x, c)
+            for i in range(len(x)):
+                eigvecs = np.concatenate((eigvecs, x[i]))
+    eigvecs = np.vsplit(eigvecs, countsplit)
+    return eigvecs
+
 #ini power method
 '''
 def normalize(x):
@@ -171,4 +175,3 @@ eigval, arr = powermethod(C)
 print(eigval)
 print(arr)
 '''
-print(calceigfaces(D))
