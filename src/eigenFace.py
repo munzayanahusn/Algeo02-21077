@@ -48,7 +48,11 @@ def nilaiTengah(arr):
     # print(mean)
 
     # Save average
+    print("ukmean <3")
+    print(np.shape(mean))
     convMean = convertSquareMatrix(mean)
+    print("ukconvmean <3")
+    print(np.shape(convMean))
     img = Image.fromarray(np.uint8(convMean), mode='L')
     img.save('../test/tryset/meanTraining.png')
     # print(convMean)
@@ -98,7 +102,7 @@ def covarian(A):
 
     img = Image.fromarray(np.uint8(C), mode='L')
     img.save('../test/tryset/covarian.png')
-    print(img.size)
+    #print(img.size)
 
     return C
 
@@ -148,9 +152,8 @@ def eigenvector(C):
     a = np.empty((len(eigvals), n, n))
     #x = [[[0 for k in range (n)] for j in range (100)] for i in range (len(eigvals))]
     #x = np.empty((len(eigvals), n, n))
-    cntv = 0
     eigvecs = np.empty((n, 1))
-    countsplit = 1
+    countsplit = 0
     for i in range(0, len(eigvals)):
         a[i] = np.subtract(np.multiply(np.identity(n), eigvals[i]), C)
         x = scipy.linalg.null_space(a[i])
@@ -158,27 +161,48 @@ def eigenvector(C):
         if(c > 0):
             countsplit += 1
             x = np.hsplit(x, c)
-            for i in range(len(x)):
-                eigvecs = np.concatenate((eigvecs, x[i]))
+            for j in range(len(x)):
+                if(countsplit == 0 and j == 0):
+                    eigvecs = x[j]
+                else:
+                    eigvecs = np.concatenate((eigvecs, x[j]))
+        eigvecs = np.delete(eigvecs, 0, 0)
     eigvecs = np.vsplit(eigvecs, countsplit)
     return eigvecs
 
+def calceigface(A, eigvecs):
+    for i in range (0, len(eigvecs)):
+        eigvecs[i] = np.matmul(A, eigvecs[i])
+    return eigvecs
 
 # PROGRAM UTAMA
 imageExt.listOfPicExtract("../test/dataset//")
 arr = convertOneRow(imageExt.arrPic)
 # nilaiTengah(arr)
 diff = selisih(nilaiTengah(arr), arr)
-eigface = eigenvector(covarian(diff))
+eigface = calceigface(diff, eigenvector(covarian(diff)))
 for i in range(0, len(eigface)):
-    print("mat" + str(i))
-    print(eigface[i])
-    '''
+    temp = convertSquareMatrix((eigface[i]))
+    temp = np.reshape(temp, (256, 256))
     dir = '../test/faceEigen/face' + str(i) +'.png'
-    img = Image.fromarray(np.uint8(eigface[i]), mode='L')
+    img = Image.fromarray(np.uint8(temp), mode='L')
     img.save(dir)
-    '''
 
+#ini semua buat ngetes pake library numpy buat eigval eigvec
+'''    
+(f, g) = np.linalg.eig(covarian(diff))
+gnew = np.empty((len(g), 65536, 1))
+for i in range (0, len(g)):
+    tempz = g[i]
+    tempz = np.reshape(tempz, (len(tempz), 1))
+    gnew[i] = np.matmul(diff, tempz)
+for i in range(0, len(gnew)):
+    tempzz = convertSquareMatrix((gnew[i]))
+    tempzz = np.reshape(tempzz, (256, 256))
+    dir = '../test/faceEigen/facez' + str(i) +'.png'
+    img = Image.fromarray(np.uint8(tempzz), mode='L')
+    img.save(dir)
+'''
 ### BACKUP COMMENT ###
 # ini power method
 '''
