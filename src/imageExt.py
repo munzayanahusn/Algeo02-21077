@@ -27,6 +27,7 @@ def listOfPicExtract(dirpath):
         dirpath, "*.jpg"))
         
     for filename in filename_list:
+        print(filename)
         arrayPic = picExtract(filename)
 
         arrPic.append(arrayPic)
