@@ -16,12 +16,12 @@ window.overrideredirect(1)
 
 s = ttk.Style()
 s.theme_use('clam')
-s.configure("red.Horizontal.TProgressbar", foreground='red', background='#4f4f4f')
+s.configure("red.Horizontal.TProgressbar", foreground='red', background='#3700B3')
 progress=Progressbar(window,style="red.Horizontal.TProgressbar",orient=HORIZONTAL,length=500,mode='determinate',)
 
 # Progress Bar
 def new_win():
-    import face_recognition
+    import tes2
 
 def bar():
     l4=Label(window,text='Loading...',fg='white',bg=a)
@@ -42,7 +42,7 @@ def bar():
         
 progress.place(x=-10,y=235)
 
-a='#249794'
+a='#303030'
 Frame(window,width=427,height=241,bg=a).place(x=0,y=0)
 b1=Button(window,width=10,height=1,text='Mulai',command=bar,border=0,fg=a,bg='white')
 b1.place(x=170,y=200)
