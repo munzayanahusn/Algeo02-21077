@@ -2,24 +2,25 @@
 from turtle import xcor
 import numpy as np
 import scipy.linalg
+from sqlalchemy import false
 import imageExt
 from PIL import Image
 
 global mean
 mean = []
-
+size = 256 
+facenotfound = False
 
 def convertSquareMatrix(arr):
     # Mengubah array (N^2)x1 menjadi array matriks semula
     arrConverted = []
     ctr = 0
-    for i in range(0, 256):
+    for i in range(0, size):
         temp = []
-        for j in range(0, 256):
+        for j in range(0, size):
             temp.append(arr[ctr])
             ctr += 1
         arrConverted.append(temp)
-
     return arrConverted
 
 
@@ -41,21 +42,14 @@ def nilaiTengah(arr):
         sum = 0
         for j in range(0, len(arr[i])):
             sum += arr[i][j]
-
-            # print("mean", sum/len(arr))
-        mean.append(sum/len(arr[i]))
-
-    # print(mean)
-
+        mean.append(np.int_(sum/len(arr[i])))
+    '''
     # Save average
-    print("ukmean <3")
-    print(np.shape(mean))
     convMean = convertSquareMatrix(mean)
-    print("ukconvmean <3")
-    print(np.shape(convMean))
     img = Image.fromarray(np.uint8(convMean), mode='L')
     img.save('../test/tryset/meanTraining.png')
     # print(convMean)
+    '''
     return mean
 
 
@@ -68,7 +62,6 @@ def selisih(arrmean, arr):
             elmt = arr[i][j]-arrmean[i]
             temp.append(elmt)
         diff.append(temp)
-
     return diff
     '''
     # Save image selisih
@@ -93,29 +86,24 @@ def selisih(arrmean, arr):
 
 def covarian(A):
     # Mencari matriks covarian C = transpose(A) x A
-    At = np.array(A).transpose()
+    At = np.transpose(A)
     # print("At")
     # print(At)
-    C = np.matmul(At, A)
+    C = (np.matmul(At, A))
+    '''
     # print("Covarian")
     # print(C)
-
     img = Image.fromarray(np.uint8(C), mode='L')
     img.save('../test/tryset/covarian.png')
     #print(img.size)
-
+    '''
     return C
-
-# Ini nyari eig vector yg pake QR
-# trus setelah diliat2 lagi kyknya cuma perlu K eig value terbesar gitu kan jadi nyoba power method
-
 
 def Q_i(Q_min, i, j, k):
     if i < k or j < k:
         return float(i == j)
     else:
         return Q_min[i-k][j-k]
-
 
 def QRDec(A):
     n = len(A)
@@ -129,8 +117,7 @@ def QRDec(A):
         u = list(map(lambda p, q: p + alpha * q, x, e))
         norm_u = np.sqrt(sum([u_i**2 for u_i in u]))
         v = list(map(lambda p: p/norm_u, u))
-        Q_min = [[float(i == j) - 2.0 * v[i] * v[j]
-                  for i in range(n-k)] for j in range(n-k)]
+        Q_min = [[float(i == j) - 2.0 * v[i] * v[j] for i in range(n-k)] for j in range(n-k)]
         Q_t = [[Q_i(Q_min, i, j, k) for i in range(n)] for j in range(n)]
         if(k == 0):
             Q = Q_t
@@ -139,19 +126,16 @@ def QRDec(A):
         R = np.matmul(Q_t, R)
     return np.transpose(Q), R
 
-
 def eigenvector(C):
     C1 = np.copy(C)
     n = len(C)
     QQ = np.identity(n)
     for k in range(1000):
         Q, R = QRDec(C1)
-        C1 = R @ Q
-        QQ = QQ @ Q
+        C1 = np.matmul(R, Q)
+        QQ = np.matmul(QQ, Q)
     eigvals = np.diag(C1)
     a = np.empty((len(eigvals), n, n))
-    #x = [[[0 for k in range (n)] for j in range (100)] for i in range (len(eigvals))]
-    #x = np.empty((len(eigvals), n, n))
     eigvecs = np.empty((n, 1))
     countsplit = 0
     for i in range(0, len(eigvals)):
@@ -172,119 +156,127 @@ def eigenvector(C):
 
 def calceigface(A, eigvecs):
     for i in range (0, len(eigvecs)):
-        eigvecs[i] = np.matmul(A, eigvecs[i])
+        eigvecs[i] = np.dot(A, eigvecs[i])
     return eigvecs
 
+def reconstruct(eigface, diff, k):
+    weights = np.zeros((len(diff[0]),k))
+    rec_face=[]
+    for i in range(len(diff[0])):
+        w = np.dot(eigface, diff[:,i])
+        weights[i,:] = w
+        face = np.dot(w, eigface)
+        face = face + np.transpose(meann)
+        reshape_face = np.reshape(face, (size,size))
+        rec_face.append(reshape_face)
+    return rec_face
+
+def projectquery(eigface, normquery, k):
+    weights = np.zeros((len(eigface),k))
+    for i in range(len(eigface)):
+        w = np.dot(eigface, normquery)
+        w = np.reshape(w, (len(w), ))
+        weights[i,:] = w
+        face = np.dot(w, eigface)
+        face = face + np.transpose(meann)
+        reshape_face = np.reshape(face, (size,size))
+    return reshape_face
+
+def eucdist(arr1, arr2):
+    temparr = np.abs(arr1 - arr2)
+    sum_sq = np.dot(np.transpose(temparr), temparr)
+    sum_sq = np.sqrt(sum_sq)
+    return np.min(sum_sq)
+    
+def findface(prq, rec_face, th = 150):
+    mindist = eucdist(prq, rec_face[0])
+    idxclosestface = 0
+    for i in range(1, len(rec_face)):
+        currdist = eucdist(prq, rec_face[i])
+        if(mindist > currdist):
+            mindist = currdist
+            idxclosestface = i
+    if(mindist > th): 
+        idxclosestface = -1
+    return idxclosestface
+
+
 # PROGRAM UTAMA
+
+# Training Image
 imageExt.listOfPicExtract("../test/dataset//")
-arr = convertOneRow(imageExt.arrPic)
-# nilaiTengah(arr)
-diff = selisih(nilaiTengah(arr), arr)
-eigface = calceigface(diff, eigenvector(covarian(diff)))
-for i in range(0, len(eigface)):
-    temp = convertSquareMatrix((eigface[i]))
-    temp = np.reshape(temp, (256, 256))
+arr = np.array(convertOneRow(imageExt.arrPic))
+meann = nilaiTengah(arr)
+diff = np.array(selisih(meann, arr))
+
+'''
+for i in range(len(diff[0])):
+    tempd = diff[:, i]
+    tempd = (tempd-np.min(tempd))/(np.max(tempd)-np.min(tempd))
+    tempd *= 255
+    tempd = (np.reshape(tempd, (size, size)))
+    dir = '../test/faceEigen/difface' + str(i) +'.png'
+    img = Image.fromarray(np.uint8(tempd), mode='L')
+    img.save(dir)
+'''
+
+cov = np.int_(covarian(diff))
+eigv = eigenvector(cov)
+eigface = calceigface(diff, eigv)
+eigface = np.reshape(eigface, (len(eigface), (size*size)))
+
+'''
+for i in range(len(eigface)):
+    temp = eigface[i]
+    temp = (temp-np.min(temp))/(np.max(temp)-np.min(temp))
+    temp *= 255
+    temp = (np.reshape(temp, (size, size)))
     dir = '../test/faceEigen/face' + str(i) +'.png'
     img = Image.fromarray(np.uint8(temp), mode='L')
     img.save(dir)
+'''
 
-#ini semua buat ngetes pake library numpy buat eigval eigvec
-'''    
-(f, g) = np.linalg.eig(covarian(diff))
-gnew = np.empty((len(g), 65536, 1))
-for i in range (0, len(g)):
-    tempz = g[i]
-    tempz = np.reshape(tempz, (len(tempz), 1))
-    gnew[i] = np.matmul(diff, tempz)
-for i in range(0, len(gnew)):
-    tempzz = convertSquareMatrix((gnew[i]))
-    tempzz = np.reshape(tempzz, (256, 256))
-    dir = '../test/faceEigen/facez' + str(i) +'.png'
-    img = Image.fromarray(np.uint8(tempzz), mode='L')
+rec_face = reconstruct(eigface, diff, len(eigface))
+
+for i in range(len(rec_face)):
+    tempr = rec_face[i]
+    tempr = (tempr-np.min(tempr))/(np.max(tempr)-np.min(tempr))
+    tempr *= 255
+    rec_face[i] = tempr
+
+'''
+for i in range(len(rec_face)):
+    print(rec_face[i])
+    tempr = (np.reshape(rec_face[i], (size, size)))
+    dir = '../test/faceEigen/recface' + str(i) +'.png'
+    img = Image.fromarray(np.uint8(tempr), mode='L')
     img.save(dir)
 '''
-### BACKUP COMMENT ###
-# ini power method
-'''
-def normalize(x):
-    fac = abs(x).max()
-    x_n = x / x.max()
-    return fac, x_n
 
-def powermethod(arr):
-    n = len(arr)
-    eigvec = np.ones(n)
-    eigval = 0
-    for i in range(1000):
-        eigvec = np.dot(arr, eigvec)
-        eigval, eigvec = normalize(eigvec)
-    return eigval, eigvec
+#Query
+query = np.reshape((imageExt.picExtract("../test/queryface.jpg")), ((size*size), 1))
 
-shifted power method buat nyari K largest eigen valuenya masih belum bener, jadi bar bisa nyari 1 largest euigval
-def calceigfaces(C, K = 3):
-    n = len(C)
-    eigfaces = np.empty((K, n))
-    first_eigval, first_eigvec = powermethod(C)
-    eigfaces[0] = first_eigvec
-    C -= (first_eigval * np.identity(n))
-    eigval, eigvec = powermethod(C)
-    for i in range(1, K):
-        eigfaces[i] = eigvec
-        print(eigval)
-    return eigfaces
-'''
+normquery = np.array(selisih(meann, query))
 
-'''
-C = ([[ 3,  -2,  0],
-       [ -2,  3,  0],
-       [ 0,  0,  5]])
-D = ([[ 3,  0],
-      [ 8,  -1]])
+prq = projectquery(eigface, normquery, len(eigface))
+prq = (prq-np.min(prq))/(np.max(prq)-np.min(prq))
+prq *= 255
 
-eigval, arr = powermethod(C)
-print(eigval)
-print(arr)
-'''
 
-'''
-def matrixA(arr):
-    # Menggabungkan face vector menjadi matriks ukuran N^2 * M.
-    A = []
-    for i in range(0, len(arr[0])):
-        temp = []
-        for k in range(0, len(arr)):
-            temp.append(arr[k][i])
-        A.append(temp)
-    # print(A)
-    return A
-'''
+tempprq = (np.reshape(prq, (size, size)))
+dir = '../test/faceEigen/prq' +'.png'
+img = Image.fromarray(np.uint8(tempprq), mode='L')
+img.save(dir)
 
-# Coba pakai lib
-'''
-    (eigval, eigvector) = np.linalg.eig(C)
-    print("---")
-    print(eigval)
 
-    temp = np.hsplit(eigvector, 1)
-    for i in range(0, len(temp)):
-        eigface = np.matmul(arrA, temp[i])
-        eigface.reshape(eigface,(256,256,-1))
+idxclosestface = findface(prq, rec_face)
 
-        dir = '../test/tryset/face' + str(i) + '.png'
-        img = Image.fromarray(np.uint8(eigface), mode='L')
-        img.save(dir)
-
-    ''
-    eigface = np.matmul(eigvector, At)
-    for i in range(0, len(eigface[0])):
-        temp = []
-        for j in range(0, len(eigface)):
-            temp.append(eigface[j][i])
-
-        arrFace = convertSquareMat(temp)
-        # print(arrDiff)
-
-        dir = '../test/tryset/face' + str(i) + '.png'
-        img = Image.fromarray(np.uint8(arrFace), mode='L')
-        img.save(dir)
-    '''
+if(idxclosestface != -1): 
+    closestface = arr[:,idxclosestface]
+    tempc = (np.reshape(closestface, (size, size)))
+    tempc = (tempc-np.min(tempc))/(np.max(tempc)-np.min(tempc))
+    tempc *= 255
+    dir = '../test/Res/res.png'
+    img = Image.fromarray(np.uint8(tempc), mode='L')
+    img.save(dir)
+else: facenotfound = True
