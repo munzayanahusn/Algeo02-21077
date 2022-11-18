@@ -5,13 +5,15 @@ from glob import glob
 
 global arrPic
 arrPic = []
+global size
+size = 512
 
 
 def picExtract(dir):
     im_1 = Image.open(
         dir).convert('L')
 
-    im_1 = im_1.resize((256, 256), Image.ANTIALIAS)
+    im_1 = im_1.resize((size, size), Image.ANTIALIAS)
     '''
     w, h = im_1.size
     print("width", w, "\n")
