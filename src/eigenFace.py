@@ -252,7 +252,8 @@ for i in range(len(rec_face)):
 '''
 
 #Query
-query = np.reshape((imageExt.picExtract("../test/queryface.jpg")), ((imageExt.size*imageExt.size), 1))
+query, querycol = imageExt.picExtract("../test/queryface.jpg")
+query = np.reshape(query, ((imageExt.size*imageExt.size), 1))
 
 normquery = np.array(selisih(meann, query))
 
@@ -268,14 +269,13 @@ img.save(dir)
 
 
 idxclosestface = findface(prq, rec_face)
-
+arrPiccolor = np.array(imageExt.arrPiccolor)
 if(idxclosestface != -1): 
-    closestface = arr[:,idxclosestface]
-    tempc = (np.reshape(closestface, (imageExt.size, imageExt.size)))
-    tempc = (tempc-np.min(tempc))/(np.max(tempc)-np.min(tempc))
+    closestface = arrPiccolor[idxclosestface]
+    tempc = (closestface-np.min(closestface))/(np.max(closestface)-np.min(closestface))
     tempc *= 255
     dir = '../test/res.png'
-    img = Image.fromarray(np.uint8(tempc), mode='L')
+    img = Image.fromarray(np.uint8(tempc))
     img.save(dir)
 else: facenotfound = True
 

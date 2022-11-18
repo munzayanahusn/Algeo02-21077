@@ -3,8 +3,9 @@ from numpy import array
 import os
 from glob import glob
 
-global arrPic
+global arrPic, arrPiccolor
 arrPic = []
+arrPiccolor = []
 global size
 size = 512
 
@@ -12,15 +13,18 @@ size = 512
 def picExtract(dir):
     im_1 = Image.open(
         dir).convert('L')
-
+    im_2 = Image.open(
+        dir)
     im_1 = im_1.resize((size, size), Image.ANTIALIAS)
+    im_2 = im_2.resize((size, size), Image.ANTIALIAS)
     '''
     w, h = im_1.size
     print("width", w, "\n")
     print("heigth", h, "\n")
     '''
-    ar = array(im_1)
-    return ar
+    ar1 = array(im_1)
+    ar2 = array(im_2)
+    return ar1, ar2
 
 
 def listOfPicExtract(dirpath):
@@ -29,9 +33,10 @@ def listOfPicExtract(dirpath):
         dirpath, "*.jpg"))
         
     for filename in filename_list:
-        arrayPic = picExtract(filename)
+        arrayPic, arrayPiccolor= picExtract(filename)
 
         arrPic.append(arrayPic)
+        arrPiccolor.append(arrayPiccolor)
 
 '''
 print("len", len(arrPic))
