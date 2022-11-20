@@ -155,11 +155,9 @@ def calceigface(A, eigvecs):
     return eigvecs
 
 def reconstruct(eigface, diff):
-    weights = np.zeros((len(diff[0]), len(eigface)))
     rec_face=[]
     for i in range(len(diff[0])):
         w = np.dot(eigface, diff[:,i])
-        weights[i,:] = w
         face = np.dot(w, eigface)
         face = face + np.transpose(meann)
         reshape_face = np.reshape(face, (imageExt.size,imageExt.size))
@@ -167,11 +165,9 @@ def reconstruct(eigface, diff):
     return rec_face
 
 def projectquery(eigface, normquery):
-    weights = np.zeros((len(eigface), len(eigface)))
     for i in range(len(eigface)):
         w = np.dot(eigface, normquery)
         w = np.reshape(w, (len(w), ))
-        weights[i,:] = w
         face = np.dot(w, eigface)
         face = face + np.transpose(meann)
         reshape_face = np.reshape(face, (imageExt.size,imageExt.size))
