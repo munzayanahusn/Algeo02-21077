@@ -144,11 +144,10 @@ def eigenvector(C):
             countsplit += 1
             x = np.hsplit(x, c)
             for j in range(len(x)):
-                if(countsplit == 0 and j == 0):
+                if(countsplit == 1 and j == 0):
                     eigvecs = x[j]
                 else:
                     eigvecs = np.concatenate((eigvecs, x[j]))
-        eigvecs = np.delete(eigvecs, 0, 0)
     eigvecs = np.vsplit(eigvecs, countsplit)
     return eigvecs
 
@@ -157,8 +156,8 @@ def calceigface(A, eigvecs):
         eigvecs[i] = np.dot(A, eigvecs[i])
     return eigvecs
 
-def reconstruct(eigface, diff, k):
-    weights = np.zeros((len(diff[0]),k))
+def reconstruct(eigface, diff):
+    weights = np.zeros((len(diff[0]), len(eigface)))
     rec_face=[]
     for i in range(len(diff[0])):
         w = np.dot(eigface, diff[:,i])
@@ -169,8 +168,8 @@ def reconstruct(eigface, diff, k):
         rec_face.append(reshape_face)
     return rec_face
 
-def projectquery(eigface, normquery, k):
-    weights = np.zeros((len(eigface),k))
+def projectquery(eigface, normquery):
+    weights = np.zeros((len(eigface), len(eigface)))
     for i in range(len(eigface)):
         w = np.dot(eigface, normquery)
         w = np.reshape(w, (len(w), ))
@@ -228,13 +227,13 @@ for i in range(len(eigface)):
     temp = eigface[i]
     temp = (temp-np.min(temp))/(np.max(temp)-np.min(temp))
     temp *= 255
-    temp = (np.reshape(temp, (size, size)))
+    temp = (np.reshape(temp, (imageExt.size, imageExt.size)))
     dir = '../test/faceEigen/face' + str(i) +'.png'
     img = Image.fromarray(np.uint8(temp), mode='L')
     img.save(dir)
 '''
 
-rec_face = reconstruct(eigface, diff, len(eigface))
+rec_face = reconstruct(eigface, diff)
 
 for i in range(len(rec_face)):
     tempr = rec_face[i]
@@ -245,7 +244,7 @@ for i in range(len(rec_face)):
 '''
 for i in range(len(rec_face)):
     print(rec_face[i])
-    tempr = (np.reshape(rec_face[i], (size, size)))
+    tempr = (np.reshape(rec_face[i], (imageExt.size, imageExt.size)))
     dir = '../test/faceEigen/recface' + str(i) +'.png'
     img = Image.fromarray(np.uint8(tempr), mode='L')
     img.save(dir)
@@ -257,16 +256,16 @@ query = np.reshape(query, ((imageExt.size*imageExt.size), 1))
 
 normquery = np.array(selisih(meann, query))
 
-prq = projectquery(eigface, normquery, len(eigface))
+prq = projectquery(eigface, normquery)
 prq = (prq-np.min(prq))/(np.max(prq)-np.min(prq))
 prq *= 255
 
-
+'''
 tempprq = (np.reshape(prq, (imageExt.size, imageExt.size)))
 dir = '../test/faceEigen/prq' +'.png'
 img = Image.fromarray(np.uint8(tempprq), mode='L')
 img.save(dir)
-
+'''
 
 idxclosestface = findface(prq, rec_face)
 arrPiccolor = np.array(imageExt.arrPiccolor)
