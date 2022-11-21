@@ -1,1 +1,0 @@
-eigenFace.main()
