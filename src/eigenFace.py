@@ -1,7 +1,6 @@
 import time
 import numpy as np
 import scipy.linalg
-from sqlalchemy import false
 import imageExt
 from PIL import Image
 
@@ -68,10 +67,8 @@ def selisih(arrmean, arr):
         temp = []
         for j in range(0, len(diff)):
             temp.append(diff[j][i])
-
         arrDiff = convertSquareMat(temp)
         # print(arrDiff)
-
         dir = '../test/tryset/selisih' + str(i) + '.png'
         img = Image.fromarray(np.uint8(arrDiff), mode='L')
         img.save(dir)
@@ -156,9 +153,11 @@ def calceigface(A, eigvecs):
     return eigvecs
 
 def reconstruct(eigface, diff):
+    weights = np.zeros((len(diff[0]), len(eigface)))
     rec_face=[]
     for i in range(len(diff[0])):
         w = np.dot(eigface, diff[:,i])
+        weights[i,:] = w
         face = np.dot(w, eigface)
         face = face + np.transpose(meann)
         reshape_face = np.reshape(face, (imageExt.size,imageExt.size))
@@ -166,9 +165,11 @@ def reconstruct(eigface, diff):
     return rec_face
 
 def projectquery(eigface, normquery):
+    weights = np.zeros((len(eigface), len(eigface)))
     for i in range(len(eigface)):
         w = np.dot(eigface, normquery)
         w = np.reshape(w, (len(w), ))
+        weights[i,:] = w
         face = np.dot(w, eigface)
         face = face + np.transpose(meann)
         reshape_face = np.reshape(face, (imageExt.size,imageExt.size))
@@ -196,84 +197,82 @@ def findface(prq, rec_face, th = 1000):
 # PROGRAM UTAMA
 
 # Training Image
-def main():
-    print("Start process...")
-    imageExt.listOfPicExtract("../test/dataset//")
-    arr = np.array(convertOneRow(imageExt.arrPic))
-    meann = nilaiTengah(arr)
-    diff = np.array(selisih(meann, arr))
+imageExt.listOfPicExtract("../test/dataset//")
+arr = np.array(convertOneRow(imageExt.arrPic))
+meann = nilaiTengah(arr)
+diff = np.array(selisih(meann, arr))
 
-    '''
-    for i in range(len(diff[0])):
-        tempd = diff[:, i]
-        tempd = (tempd-np.min(tempd))/(np.max(tempd)-np.min(tempd))
-        tempd *= 255
-        tempd = (np.reshape(tempd, (size, size)))
-        dir = '../test/faceEigen/difface' + str(i) +'.png'
-        img = Image.fromarray(np.uint8(tempd), mode='L')
-        img.save(dir)
-    '''
-
-    cov = np.int_(covarian(diff))
-    eigv = eigenvector(cov)
-    eigface = calceigface(diff, eigv)
-    eigface = np.reshape(eigface, (len(eigface), (imageExt.size*imageExt.size)))
-
-    '''
-    for i in range(len(eigface)):
-        temp = eigface[i]
-        temp = (temp-np.min(temp))/(np.max(temp)-np.min(temp))
-        temp *= 255
-        temp = (np.reshape(temp, (imageExt.size, imageExt.size)))
-        dir = '../test/faceEigen/face' + str(i) +'.png'
-        img = Image.fromarray(np.uint8(temp), mode='L')
-        img.save(dir)
-    '''
-
-    rec_face = reconstruct(eigface, diff)
-
-    for i in range(len(rec_face)):
-        tempr = rec_face[i]
-        tempr = (tempr-np.min(tempr))/(np.max(tempr)-np.min(tempr))
-        tempr *= 255
-        rec_face[i] = tempr
-
-    '''
-    for i in range(len(rec_face)):
-        print(rec_face[i])
-        tempr = (np.reshape(rec_face[i], (imageExt.size, imageExt.size)))
-        dir = '../test/faceEigen/recface' + str(i) +'.png'
-        img = Image.fromarray(np.uint8(tempr), mode='L')
-        img.save(dir)
-    '''
-
-    #Query
-    query, querycol = imageExt.picExtract("../test/queryface.jpg")
-    query = np.reshape(query, ((imageExt.size*imageExt.size), 1))
-
-    normquery = np.array(selisih(meann, query))
-
-    prq = projectquery(eigface, normquery)
-    prq = (prq-np.min(prq))/(np.max(prq)-np.min(prq))
-    prq *= 255
-
-    '''
-    tempprq = (np.reshape(prq, (imageExt.size, imageExt.size)))
-    dir = '../test/faceEigen/prq' +'.png'
-    img = Image.fromarray(np.uint8(tempprq), mode='L')
+'''
+for i in range(len(diff[0])):
+    tempd = diff[:, i]
+    tempd = (tempd-np.min(tempd))/(np.max(tempd)-np.min(tempd))
+    tempd *= 255
+    tempd = (np.reshape(tempd, (size, size)))
+    dir = '../test/faceEigen/difface' + str(i) +'.png'
+    img = Image.fromarray(np.uint8(tempd), mode='L')
     img.save(dir)
-    '''
+'''
 
-    idxclosestface = findface(prq, rec_face)
-    arrPiccolor = np.array(imageExt.arrPiccolor)
-    if(idxclosestface != -1): 
-        closestface = arrPiccolor[idxclosestface]
-        tempc = (closestface-np.min(closestface))/(np.max(closestface)-np.min(closestface))
-        tempc *= 255
-        dir = '../test/res.png'
-        img = Image.fromarray(np.uint8(tempc))
-        img.save(dir)
-    else: facenotfound = True
+cov = np.int_(covarian(diff))
+eigv = eigenvector(cov)
+eigface = calceigface(diff, eigv)
+eigface = np.reshape(eigface, (len(eigface), (imageExt.size*imageExt.size)))
 
-    end = time.time()
-    timetaken = end-start
+'''
+for i in range(len(eigface)):
+    temp = eigface[i]
+    temp = (temp-np.min(temp))/(np.max(temp)-np.min(temp))
+    temp *= 255
+    temp = (np.reshape(temp, (imageExt.size, imageExt.size)))
+    dir = '../test/faceEigen/face' + str(i) +'.png'
+    img = Image.fromarray(np.uint8(temp), mode='L')
+    img.save(dir)
+'''
+
+rec_face = reconstruct(eigface, diff)
+
+for i in range(len(rec_face)):
+    tempr = rec_face[i]
+    tempr = (tempr-np.min(tempr))/(np.max(tempr)-np.min(tempr))
+    tempr *= 255
+    rec_face[i] = tempr
+
+'''
+for i in range(len(rec_face)):
+    print(rec_face[i])
+    tempr = (np.reshape(rec_face[i], (imageExt.size, imageExt.size)))
+    dir = '../test/faceEigen/recface' + str(i) +'.png'
+    img = Image.fromarray(np.uint8(tempr), mode='L')
+    img.save(dir)
+'''
+
+#Query
+query, querycol = imageExt.picExtract("../test/queryface.jpg")
+query = np.reshape(query, ((imageExt.size*imageExt.size), 1))
+
+normquery = np.array(selisih(meann, query))
+
+prq = projectquery(eigface, normquery)
+prq = (prq-np.min(prq))/(np.max(prq)-np.min(prq))
+prq *= 255
+
+'''
+tempprq = (np.reshape(prq, (imageExt.size, imageExt.size)))
+dir = '../test/faceEigen/prq' +'.png'
+img = Image.fromarray(np.uint8(tempprq), mode='L')
+img.save(dir)
+'''
+
+idxclosestface = findface(prq, rec_face)
+arrPiccolor = np.array(imageExt.arrPiccolor)
+if(idxclosestface != -1): 
+    closestface = arrPiccolor[idxclosestface]
+    tempc = (closestface-np.min(closestface))/(np.max(closestface)-np.min(closestface))
+    tempc *= 255
+    dir = '../test/res.png'
+    img = Image.fromarray(np.uint8(tempc))
+    img.save(dir)
+else: facenotfound = True
+
+end = time.time()
+timetaken = end-start

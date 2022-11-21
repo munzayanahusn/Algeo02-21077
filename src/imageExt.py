@@ -33,8 +33,8 @@ def listOfPicExtract(dirpath):
         dirpath, "*.jpg"))
         
     for filename in filename_list:
+        arrayPic = picExtract(filename)
         arrayPic, arrayPiccolor= picExtract(filename)
-
         arrPic.append(arrayPic)
         arrPiccolor.append(arrayPiccolor)
 
