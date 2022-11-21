@@ -1,3 +1,7 @@
+from importlib_metadata import version
+
+
+#version
 import time
 import numpy as np
 import scipy.linalg
