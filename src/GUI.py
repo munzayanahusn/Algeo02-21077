@@ -113,7 +113,7 @@ class App(customtkinter.CTk):
         self.label_5.grid(row=7, column=2, columnspan=1, pady=10, padx=20, sticky="we")
 
         self.label_6 = customtkinter.CTkLabel(master=self.frame_right,
-                                              text= "0 seconds",
+                                              text="00.00",
                                               text_font=("Roboto Medium", -16))  # font name and size in px
         self.label_6.place(x = 1155, y = 565)
 
@@ -202,7 +202,23 @@ class App(customtkinter.CTk):
         self.optionmenu_1.set("Dark")
 
     def button_event(self):
-        eigenFace.main()
+        global closest_result
+        start = time.time()
+        eigenFace.main(foldername, imagename)
+        end = time.time()
+        timetaken = round(end-start,2)
+        self.label_time = customtkinter.CTkLabel(master=self.frame_right,
+                                              text=timetaken,
+                                              text_font=("Roboto Medium", -16))  # font name and size in px
+        self.label_time.place(x = 1155, y = 565)
+        
+        x = Image.open("D:\Vs Code\Algeo02-21077\\test\\res.png")
+        resize_image = x.resize((400, 400))
+        closest_result = ImageTk.PhotoImage(resize_image)
+
+        self.image_label = tkinter.Label(master=self, image=closest_result)
+        self.image_label.place(x=1100, y=400)
+
 
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
@@ -215,17 +231,17 @@ class App(customtkinter.CTk):
         global folderTest
         global foldername
         self.foldername = filedialog.askdirectory()
-        foldername = self.foldername.split('/')[len(self.foldername.split('/'))-1]
+        foldername = self.foldername
         self.folder = customtkinter.CTkLabel(master=self.frame_right, text_font=("Roboto Medium", 10, "bold"),
-                                             text=foldername).place(x = 1155, y = 65)
+                                             text=self.foldername.split('/')[len(self.foldername.split('/'))-1]).place(x = 1155, y = 65)
 
     def select_picture(self):
         global imageTest
         global imagename
         self.imagename = filedialog.askopenfilename(initialdir="ALGEO02-21077", title="Select an image", filetypes=(("png files", "*.png"), ("jpg files", "*.jpg"), ("All Files", "*.*")))
-        imagename = self.imagename.split('/')[len(self.imagename.split('/'))-1]
+        imagename = self.imagename
         self.image = customtkinter.CTkLabel(master=self.frame_right, text_font=("Roboto Medium", 10, "bold"),
-                                             text=imagename).place(x = 1155, y = 265)
+                                             text=self.imagename.split('/')[len(self.imagename.split('/'))-1]).place(x = 1155, y = 265)
         
         img = Image.open(self.imagename)
         imageTest = ImageTk.PhotoImage(img)
@@ -241,13 +257,6 @@ class App(customtkinter.CTk):
 
         self.label_8 = customtkinter.CTkLabel(master=self.frame_info2, image=imageTest)
         self.label_8.grid(column=0, row=1, sticky="nwe", padx=15, pady=15)
-
-    def start_timer(self):
-        global timer
-        start_time = time.time()
-        # while ....
-        timer = (time.time()-start_time)
-
 
 if __name__ == "__main__":
     app = App()
