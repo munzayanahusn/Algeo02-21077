@@ -1,10 +1,11 @@
 import tkinter
 import customtkinter
 from PIL import Image, ImageTk
-from tkinter import filedialog, messagebox
+from tkinter import Canvas, filedialog, messagebox
 from tkinter.filedialog import askdirectory
 import os
 import time
+import eigenFace
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -63,7 +64,7 @@ class App(customtkinter.CTk):
         self.label_mode.grid(row=9, column=0, pady=0, padx=20, sticky="w")
 
         self.optionmenu_1 = customtkinter.CTkOptionMenu(master=self.frame_left,
-                                                        values=["Light", "Dark", "System"],
+                                                        values=["Light", "Dark"],
                                                         command=self.change_appearance_mode)
         self.optionmenu_1.grid(row=10, column=0, pady=10, padx=20, sticky="w")
 
@@ -87,8 +88,9 @@ class App(customtkinter.CTk):
         self.frame_info4 = customtkinter.CTkFrame(master=self.frame_right)
         self.frame_info4.grid(row=8, column=0, columnspan=2, rowspan=4, pady=20, padx=20, sticky="nsew")
 
-        self.add_folder_image = self.load_image("/test_images/add-folder.png", 20)
-        self.add_list_image = self.load_image("/test_images/add-list.png", 20)
+        self.add_folder_image = self.load_image("/GUI/test_images/add-folder.png", 20)
+        self.add_list_image = self.load_image("/GUI/test_images/add-list.png", 20)
+        self.add_logo_image = self.load_image("/GUI/test_images/logo.png", 120)
 
         self.label_2 = customtkinter.CTkLabel(master=self.frame_right,
                                               text="Insert Your Dataset:",
@@ -115,6 +117,9 @@ class App(customtkinter.CTk):
                                               text_font=("Roboto Medium", -16))  # font name and size in px
         self.label_6.place(x = 1155, y = 565)
 
+        self.label_7 = customtkinter.CTkLabel(master=self.frame_left, image=self.add_logo_image)
+        self.label_7.grid(row=4, column=0, pady=10, padx=10)
+
         self.button_3 = customtkinter.CTkButton(master=self.frame_right, image=self.add_folder_image, compound="right",
                                                 text="Insert",
                                                 command=self.select_folder,
@@ -136,7 +141,7 @@ class App(customtkinter.CTk):
                                                 command=self.quit)
         self.button_5.grid(row=10, column=2, columnspan=1, pady=20, padx=20, sticky="we")
         
-        self.button_6 = customtkinter.CTkButton(master=self.frame_right,
+        self.button_6 = customtkinter.CTkButton(master=self.frame_right, compound="right",
                                                 text="",
                                                 border_width=2,  # <- custom border_width
                                                 fg_color=None,  # <- no fg_color
@@ -197,7 +202,7 @@ class App(customtkinter.CTk):
         self.optionmenu_1.set("Dark")
 
     def button_event(self):
-        print("Button pressed")
+        eigenFace.main()
 
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
@@ -206,16 +211,35 @@ class App(customtkinter.CTk):
         """ load rectangular image with path relative to PATH """
         return ImageTk.PhotoImage(Image.open(PATH + path).resize((image_size, image_size)))
 
-    def select_picture(self):
-        global img
-        file_name = filedialog.askopenfilename(initialdir="../test/faceEigen/prq", title="Select Image", filetypes=("png images", "*.png"))
-        img = Image.open(file_name)
-        img = img.resize((100,100), Image.ANTIALIAS)
-        img = ImageTk.PhotoImage(img)
-
     def select_folder(self):
-        global fol
-        path = askdirectory(title="Select Folder")
+        global folderTest
+        self.foldername = filedialog.askdirectory()
+        foldername = self.foldername.split('/')[len(self.foldername.split('/'))-1]
+        self.folder = customtkinter.CTkLabel(master=self.frame_right, text_font=("Roboto Medium", 10, "bold"),
+                                             text=foldername).place(x = 1155, y = 65)
+
+    def select_picture(self):
+        global imageTest
+        global imagename
+        self.imagename = filedialog.askopenfilename(initialdir="ALGEO02-21077", title="Select an image", filetypes=(("png files", "*.png"), ("jpg files", "*.jpg"), ("All Files", "*.*")))
+        imagename = self.imagename.split('/')[len(self.imagename.split('/'))-1]
+        self.image = customtkinter.CTkLabel(master=self.frame_right, text_font=("Roboto Medium", 10, "bold"),
+                                             text=imagename).place(x = 1155, y = 265)
+        
+        img = Image.open(self.imagename)
+        imageTest = ImageTk.PhotoImage(img)
+        new_width = 100
+        new_height = int(new_width*imageTest.height() / imageTest.width())
+
+        if (new_height > 115):
+            new_height = 115
+            new_width = int(new_width * imageTest.width() / imageTest.height())
+
+        size = img.resize((new_width, new_height), Image.ANTIALIAS)
+        imageTest = ImageTk.PhotoImage(size)
+
+        self.label_8 = customtkinter.CTkLabel(master=self.frame_info2, image=imageTest)
+        self.label_8.grid(column=0, row=1, sticky="nwe", padx=15, pady=15)
 
     def start_timer(self):
         global timer

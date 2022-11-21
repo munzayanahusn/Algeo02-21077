@@ -21,7 +21,7 @@ progress=Progressbar(window,style="red.Horizontal.TProgressbar",orient=HORIZONTA
 
 # Progress Bar
 def new_win():
-    import tes2
+    import GUI
 
 def bar():
     l4=Label(window,text='Loading...',fg='white',bg=a)
