@@ -1,6 +1,3 @@
-from importlib_metadata import version
-
-
 #version
 import time
 import numpy as np
@@ -113,9 +110,9 @@ def QRDec(A):
         I = np.identity(n)
         x = [row[k] for row in R[k:]]
         e = [row[k] for row in I[k:]]
-        alpha = np.sign(x[0]) * np.sqrt(sum([x_i**2 for x_i in x]))
+        alpha = np.sign(x[0]) * np.linalg.norm(x)
         u = list(map(lambda p, q: p + alpha * q, x, e))
-        norm_u = np.sqrt(sum([u_i**2 for u_i in u]))
+        norm_u = np.linalg.norm(u)
         v = list(map(lambda p: p/norm_u, u))
         Q_min = [[float(i == j) - 2.0 * v[i] * v[j] for i in range(n-k)] for j in range(n-k)]
         Q_t = [[Q_i(Q_min, i, j, k) for i in range(n)] for j in range(n)]
