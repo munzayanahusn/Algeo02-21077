@@ -213,6 +213,7 @@ class App(customtkinter.CTk):
 
     def select_folder(self):
         global folderTest
+        global foldername
         self.foldername = filedialog.askdirectory()
         foldername = self.foldername.split('/')[len(self.foldername.split('/'))-1]
         self.folder = customtkinter.CTkLabel(master=self.frame_right, text_font=("Roboto Medium", 10, "bold"),
