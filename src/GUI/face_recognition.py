@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import Canvas, filedialog, messagebox, ttk
+import customtkinter
 
 # Init
 window = Tk()
@@ -16,6 +17,15 @@ window.config(menu=my_menu)
 def our_command():
     pass
 
+# open folder
+def openFile():
+    filepath = filedialog.askopenfilename(initialdir="C:\\Users\\Cakow\\PycharmProjects\\Main",
+                                          title="Choose File",
+                                          filetypes= (("text files","*.txt"),
+                                          ("all files","*.*")))
+    file = open(filepath,'r')
+    print(file.read())
+    file.close()
 # rounded button
 
 # Create a menu item
@@ -39,20 +49,20 @@ my_menu.add_cascade(label="Option", menu=option_menu)
 option_menu.add_command(label="Find", command=our_command)
 option_menu.add_command(label="Find Next", command=our_command)
 
-message = Label(window, text="Face Recognition", bg="#4FA095", fg="white", width=50, height=3, font=('times', 30, 'bold'))
+message = Label(window, text="Face Recognition", bg="#4FA095", fg="white", width=36, height=3, font=('times', 40, 'bold'))
 message.place(x = 170, y=20)
 
 message1 = Label(window, text="Insert Your Dataset", bg="#BAD1C2", fg="#153462", font=('Helvetica', 20, 'bold'))
 message1.place(x = 50, y=240)
 
-myButton1 = Button(window, text="Choose A Folder!", fg="#153462", bg="#5CDB95", padx=35, pady=15,)
-myButton1.place(x = 85, y=300)
+myButton1 = customtkinter.CTkButton(master=window, text="Choose A Folder!", command=openFile, fg_color=("#DB3E39", "#305252"), width=250, height=40)
+myButton1.place(x = 50, y=300)
 
 message2 = Label(window, text="Insert Your Image", bg="#BAD1C2", fg="#153462", font=('Helvetica', 20, 'bold'))
 message2.place(x = 50, y=390)
 
-myButton2 = Button(window, text="Choose An Image!", fg="#153462", bg="#5CDB95", padx=35, pady=15,)
-myButton2.place(x = 75, y=450)
+myButton2 = customtkinter.CTkButton(master=window, text="Choose An Image!", command=openFile, fg_color=("#DB3E39", "#305252"), width=250, height=40)
+myButton2.place(x = 50, y=450)
 
 message3 = Label(window, text="Result", bg="#BAD1C2", fg="#153462", font=('Microsoft Yahei UI Light', 23, 'bold'))
 message3.place(x = 50, y=550)
