@@ -29,7 +29,8 @@ Tugas Besar IF2123 Aljabar Linier dan Geometri
 
 ## Daftar Isi
 
-- [Penjelasan Singkat Program](#penjelasan-ringkas-program)
+- [Penjelasan Ringkas Program](#penjelasan-ringkas-program)
+- [Kebutuhan Kompilasi](#kebutuhan-kompilasi)
 - [Cara Menjalankan Program](#cara-menjalankan-program)
 - [Pembagian Tugas](#pembagian-tugas)
 - [Status Pengerjaan](#status-pengerjaan)
@@ -43,17 +44,17 @@ Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenfa
 ## Kebutuhan Kompilasi
 
 1. Library PIL
-   Untuk instalasi menggunakan pip jalankan command `pip install PIL`
+    `pip install PIL`
 2. Library tkinter
-   Untuk instalasi menggunakan pip jalankan command `pip install tk`
+    `pip install tk`
 3. Library customtkinter
-   Untuk instalasi menggunakan pip jalankan command `pip3 install customtkinter`
+    `pip3 install customtkinter`
 4. Library SciPy
-   Untuk instalasi menggunakan pip jalankan command `python -m pip install scipy`
+    `python -m pip install scipy`
 5. Library numpy
-   Untuk instalasi menggunakan pip jalankan command `pip install numpy`
+    `pip install numpy`
 6. Library time
-   Untuk instalasi menggunakan pip jalankan command `pip install python-time`
+    `pip install python-time`
 
 
 ## Cara Menjalankan Program
