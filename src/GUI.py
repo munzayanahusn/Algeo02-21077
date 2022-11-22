@@ -145,8 +145,8 @@ class App(customtkinter.CTk):
                                                 text="",
                                                 border_width=2,  # <- custom border_width
                                                 fg_color=None,  # <- no fg_color
-                                                bg_color= "#464646",
                                                 state="Disabled",
+                                                bg_color="#464646",
                                                 height=40, width=40)
         self.button_6.place(x = 1205, y = 415)
 
@@ -219,7 +219,7 @@ class App(customtkinter.CTk):
 
         self.image_label = tkinter.Label(master=self, image=closest_result)
         self.image_label.place(x=1100, y=400)
-
+        self.result()
 
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
@@ -258,6 +258,24 @@ class App(customtkinter.CTk):
 
         self.label_8 = customtkinter.CTkLabel(master=self.frame_info2, image=imageTest)
         self.label_8.grid(column=0, row=1, sticky="nwe", padx=15, pady=15)
+    
+    def result(self):
+        if (eigenFace.facenotfound) :
+            self.label_final = customtkinter.CTkLabel(master=self.frame_right,
+                                                text="Tidak Berhasil",
+                                                text_font=("Roboto Medium", -16))  # font name and size in px
+            self.label_final.place(x=1155, y=500)
+
+            # self.button_6.config(bg_color='red')
+            # self.button_6 = customtkinter.CTkButton(bg_color='red')
+        else :
+            self.label_final = customtkinter.CTkLabel(master=self.frame_right,
+                                                text="Berhasil",
+                                                text_font=("Roboto Medium", -16))  # font name and size in px
+            self.label_final.place(x=1155, y=500)
+            # self.button_6.config(bg_color='green')
+            # self.button_6 = customtkinter.CTkButton(bg_color='green')
+            
 
 if __name__ == "__main__":
     app = App()
