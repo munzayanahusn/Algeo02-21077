@@ -205,7 +205,7 @@ def main(foldername, imagename):
     arr = np.array(convertOneRow(imageExt.arrPic))
     meann = nilaiTengah(arr)
     diff = np.array(selisih(meann, arr))
-
+    rangeth = np.max(diff) - np.min(diff)
     '''
     for i in range(len(diff[0])):
         tempd = diff[:, i]
@@ -267,7 +267,7 @@ def main(foldername, imagename):
     img.save(dir)
     '''
 
-    idxclosestface = findface(prq, rec_face)
+    idxclosestface = findface(prq, rec_face, 0.47 * rangeth)
     arrPiccolor = np.array(imageExt.arrPiccolor)
     if(idxclosestface != -1): 
         closestface = arrPiccolor[idxclosestface]
