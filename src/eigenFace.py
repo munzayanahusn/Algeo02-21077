@@ -97,7 +97,8 @@ def covarian(A):
     return C
 
 def Q_i(Q_min, i, j, k):
-    # Fungsi pembantu QRDec untuk 
+    # Fungsi pembantu QRDec untuk mengubah mengganti elemen-elemen pada kiri atas Q_min dengan elemen-elemen matriks identitas.
+
     if i < k or j < k:
         return float(i == j)
     else:
@@ -262,7 +263,7 @@ def main(foldername, imagename):
     '''
 
     #Query
-    
+
     query, querycol = imageExt.picExtract(imagename)
     query = np.reshape(query, ((imageExt.size*imageExt.size), 1))
 
