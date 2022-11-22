@@ -205,6 +205,7 @@ class App(customtkinter.CTk):
         global closest_result
         start = time.time()
         eigenFace.main(foldername, imagename)
+        #eigenFace.facenotfound
         end = time.time()
         timetaken = round(end-start,2)
         self.label_time = customtkinter.CTkLabel(master=self.frame_right,
@@ -212,7 +213,7 @@ class App(customtkinter.CTk):
                                               text_font=("Roboto Medium", -16))  # font name and size in px
         self.label_time.place(x = 1155, y = 565)
         
-        x = Image.open("D:\Vs Code\Algeo02-21077\\test\\res.png")
+        x = Image.open("../test/res.png")
         resize_image = x.resize((400, 400))
         closest_result = ImageTk.PhotoImage(resize_image)
 
@@ -261,4 +262,3 @@ class App(customtkinter.CTk):
 if __name__ == "__main__":
     app = App()
     app.mainloop()
-    print(foldername)

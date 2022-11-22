@@ -7,6 +7,7 @@ from PIL import Image
 
 global mean
 mean = []
+global facenotfound
 facenotfound = False
 
 def convertSquareMatrix(arr):
