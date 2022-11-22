@@ -87,6 +87,7 @@ Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenfa
 ```bash
 └───Algeo02-21077
     ├───src
+    │   ├───GUI/test_images
     │   ├───GUI.py
     │   ├───imageExt.py
     │   └───eigenFace.py
@@ -94,5 +95,5 @@ Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenfa
     │   ├───dataset
     │   ├───res.png
     │   └───queryface.jpg
-    └─── README.md
+    └───README.md
 ```
