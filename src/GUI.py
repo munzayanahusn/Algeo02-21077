@@ -17,7 +17,7 @@ PATH = os.path.dirname(os.path.realpath(__file__))
 class App(customtkinter.CTk):
 
     # Set lebar dan tinggi dari aplikasi
-    WIDTH = 780 
+    WIDTH = 780
     HEIGHT = 520
 
     def __init__(self):
@@ -276,15 +276,12 @@ class App(customtkinter.CTk):
                                                 text_font=("Roboto Medium", -16))  # font name and size in px
             self.label_final.place(x=1155, y=500)
 
-            # self.button_6.config(bg_color='red')
-            # self.button_6 = customtkinter.CTkButton(bg_color='red')
         else :
             self.label_final = customtkinter.CTkLabel(master=self.frame_right,
                                                 text="Berhasil",
                                                 text_font=("Roboto Medium", -16))  # font name and size in px
             self.label_final.place(x=1155, y=500)
-            # self.button_6.config(bg_color='green')
-            # self.button_6 = customtkinter.CTkButton(bg_color='green')
+
             
 if __name__ == "__main__":
     app = App()

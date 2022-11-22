@@ -7,7 +7,7 @@ global arrPic, arrPiccolor
 arrPic = []
 arrPiccolor = []
 global size
-size = 256
+size = 512
 
 
 def picExtract(dir):

@@ -126,7 +126,7 @@ def QRDec(A):
 def eigenvector(C):
     C1 = np.copy(C)
     n = len(C)
-    for k in range(1000):
+    for k in range(100):
         Q, R = QRDec(C1)
         C1 = np.matmul(R, Q)
     eigvals = np.diag(C1)
