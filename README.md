@@ -91,8 +91,8 @@ Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenfa
     │   ├───imageExt.py
     │   └───eigenFace.py
     ├───test
-        ├───dataset
-        ├───res.png
-        └───queryface.jpg
-  
+    │   ├───dataset
+    │   ├───res.png
+    │   └───queryface.jpg
+    └─── README.md
 ```
