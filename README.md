@@ -47,7 +47,10 @@ Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenfa
 1. Pastikan pada device sudah terinstall library :
    a. PIL
    Untuk instalasi jalankan command `pip install PIL`
-   b.
+   b. tkinter
+   Untuk instalasi jalankan command `pip install tk`
+   c. customtkinter
+   Untuk instalasi jalankan command `pip3 install customtkinter`
 2.
 3.
 
@@ -68,7 +71,7 @@ Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenfa
 ## Daftar Fitur
 
 1. Inisiasi
-2.
+2. 
 
 ## Status Pengerjaan
 
