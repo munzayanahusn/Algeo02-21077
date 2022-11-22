@@ -97,12 +97,14 @@ def covarian(A):
     return C
 
 def Q_i(Q_min, i, j, k):
+    # Fungsi pembantu QRDec untuk 
     if i < k or j < k:
         return float(i == j)
     else:
         return Q_min[i-k][j-k]
 
 def QRDec(A):
+    # Fungsi yang melakukan QR Decomposition pada matriks A
     n = len(A)
     R = A
     Q = np.zeros((0, 0))
@@ -124,9 +126,10 @@ def QRDec(A):
     return np.transpose(Q), R
 
 def eigenvector(C):
+    # Fungsi mencari eigenvector dari matriks C dengan iterasi QR Decomposition
     C1 = np.copy(C)
     n = len(C)
-    for k in range(1000):
+    for k in range(100):
         Q, R = QRDec(C1)
         C1 = np.matmul(R, Q)
     eigvals = np.diag(C1)
@@ -149,11 +152,13 @@ def eigenvector(C):
     return eigvecs
 
 def calceigface(A, eigvecs):
+    # Fungsi menghitung A * setiap eigen vector
     for i in range (0, len(eigvecs)):
         eigvecs[i] = np.dot(A, eigvecs[i])
     return eigvecs
 
 def reconstruct(eigface, diff, meann):
+    # Fungsi merekonstruksi training face
     weights = np.zeros((len(diff[0]), len(eigface)))
     rec_face=[]
     for i in range(len(diff[0])):
@@ -166,6 +171,7 @@ def reconstruct(eigface, diff, meann):
     return rec_face
 
 def projectquery(eigface, normquery, meann):
+    # Fungsi merekonstruksi test face
     weights = np.zeros((len(eigface), len(eigface)))
     for i in range(len(eigface)):
         w = np.dot(eigface, normquery)
@@ -177,12 +183,14 @@ def projectquery(eigface, normquery, meann):
     return reshape_face
 
 def eucdist(arr1, arr2):
+    # Fungsi menghitung euclidean distance dari dua matriks
     temparr = np.abs(arr1 - arr2)
     sum_sq = np.dot(np.transpose(temparr), temparr)
     sum_sq = np.sqrt(sum_sq)
     return np.min(sum_sq)
     
-def findface(prq, rec_face, th = 1000):
+def findface(prq, rec_face, th):
+    # Fungsi mengembalikan indeks closest face, mengembalikan -1 jika jarak terdekat > treshold
     mindist = eucdist(prq, rec_face[0])
     idxclosestface = 0
     for i in range(1, len(rec_face)):
@@ -199,6 +207,9 @@ def findface(prq, rec_face, th = 1000):
 
 # Training Image
 def main(foldername, imagename):
+    
+    # Training Image
+
     print(foldername)
     print(imagename)
     imageExt.listOfPicExtract(foldername)
@@ -251,6 +262,7 @@ def main(foldername, imagename):
     '''
 
     #Query
+    
     query, querycol = imageExt.picExtract(imagename)
     query = np.reshape(query, ((imageExt.size*imageExt.size), 1))
 
