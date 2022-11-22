@@ -7,14 +7,17 @@ import os
 import time
 import eigenFace
 
-customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+# Menset awal tema dari tampilan guinya
+customtkinter.set_appearance_mode("System")  
+customtkinter.set_default_color_theme("blue")  
 
+# Digunakan untuk membuka path gambar untuk logo itb, dan logo pada button
 PATH = os.path.dirname(os.path.realpath(__file__))
 
 class App(customtkinter.CTk):
 
-    WIDTH = 780
+    # Set lebar dan tinggi dari aplikasi
+    WIDTH = 780 
     HEIGHT = 520
 
     def __init__(self):
@@ -23,9 +26,9 @@ class App(customtkinter.CTk):
         self.title("TUBES ALGEO 2 YGY")
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
 
-        # ============ create two frames ============
+        # ============ Membuat beberapa buah frame ============
 
-        # configure grid layout (2x1)
+        # Konfigurasi Layout Grid (2x1)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
@@ -201,6 +204,8 @@ class App(customtkinter.CTk):
         # set default values
         self.optionmenu_1.set("Dark")
 
+
+    # Fungsi untuk memulai kegiatan face-recognizing
     def button_event(self):
         global closest_result
         start = time.time()
@@ -221,13 +226,16 @@ class App(customtkinter.CTk):
         self.image_label.place(x=1100, y=400)
         self.result()
 
+    # Fungsi untuk mengganti tema tampilan GUI
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
     
+    # Fungsi untuk mengambil gambar logo
     def load_image(self, path, image_size):
         """ load rectangular image with path relative to PATH """
         return ImageTk.PhotoImage(Image.open(PATH + path).resize((image_size, image_size)))
 
+    # Fungsi untuk mengakses folder serta menampilkannya di tampilan GUI
     def select_folder(self):
         global folderTest
         global foldername
@@ -236,6 +244,7 @@ class App(customtkinter.CTk):
         self.folder = customtkinter.CTkLabel(master=self.frame_right, text_font=("Roboto Medium", 10, "bold"),
                                              text=self.foldername.split('/')[len(self.foldername.split('/'))-1]).place(x = 1155, y = 65)
 
+    # Fungsi untuk mengakses gambar serta menampilkannya di tampilan GUI
     def select_picture(self):
         global imageTest
         global imagename
@@ -259,6 +268,7 @@ class App(customtkinter.CTk):
         self.label_8 = customtkinter.CTkLabel(master=self.frame_info2, image=imageTest)
         self.label_8.grid(column=0, row=1, sticky="nwe", padx=15, pady=15)
     
+    # Fungsi untuk menampilkan text untuk mengetahui apakah proses berhasil atau tidak
     def result(self):
         if (eigenFace.facenotfound) :
             self.label_final = customtkinter.CTkLabel(master=self.frame_right,
@@ -276,7 +286,6 @@ class App(customtkinter.CTk):
             # self.button_6.config(bg_color='green')
             # self.button_6 = customtkinter.CTkButton(bg_color='green')
             
-
 if __name__ == "__main__":
     app = App()
     app.mainloop()
