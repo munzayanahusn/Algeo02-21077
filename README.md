@@ -72,7 +72,7 @@ Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenfa
 | ------------------------------- | -------------------------------------------------------------------------------- |
 | 13521077 Husnia Munzayana       | Ekstraksi gambar<br>Pemrosesan training image<br>Laporan Bab 1, 2, 3, 5          |
 | 13521084 Austin Gabriel Pardosi | GUI<br> Laporan Bab 3                                                            |
-| 13521088 Puti Nabilla Aidira    | Pemrosesan training image<br>Proses pengenalan test image<br> Laporan Bab 3, 4 4 |
+| 13521088 Puti Nabilla Aidira    | Pemrosesan training image<br>Proses pengenalan test image<br> Laporan Bab 3, 4   |
 
 ## Status Pengerjaan
 
