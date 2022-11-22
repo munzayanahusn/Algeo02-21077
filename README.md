@@ -29,11 +29,10 @@ Tugas Besar IF2123 Aljabar Linier dan Geometri
 
 ## Daftar Isi
 
-- [Penjelasan Singkat Program](#penjelasan-ringkas-program)
-- [Cara Kompilasi Program](#cara-kompilasi-program)
+- [Penjelasan Ringkas Program](#penjelasan-ringkas-program)
+- [Kebutuhan Kompilasi](#kebutuhan-kompilasi)
 - [Cara Menjalankan Program](#cara-menjalankan-program)
 - [Pembagian Tugas](#pembagian-tugas)
-- [Daftar Fitur](#daftar-fitur)
 - [Status Pengerjaan](#status-pengerjaan)
 - [Screenshot program](#screenshot-program)
 - [Struktur Program](#struktur-program)
@@ -42,23 +41,30 @@ Tugas Besar IF2123 Aljabar Linier dan Geometri
 
 Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenface yang memanfaatkan eigen value, eigen vector, eigenface, sehingga dapat ditentukan euclidean distance terkecil untuk menentukan citra wajah yang paling mirip dengan test face. Program Face Recognition ini berbasis GUI(Graphical User Interface) yang diimplementasikan dalam bahasa pemrograman Python.
 
-## Cara Kompilasi Program
+## Kebutuhan Kompilasi
 
-1. Pastikan pada device sudah terinstall library :
-   a. PIL
-   Untuk instalasi jalankan command `pip install PIL`
-   b. tkinter
-   Untuk instalasi jalankan command `pip install tk`
-   c. customtkinter
-   Untuk instalasi jalankan command `pip3 install customtkinter`
-2.
-3.
+1. Library PIL
+    `pip install PIL`
+2. Library tkinter
+    `pip install tk`
+3. Library customtkinter
+    `pip3 install customtkinter`
+4. Library SciPy
+    `python -m pip install scipy`
+5. Library numpy
+    `pip install numpy`
+6. Library time
+    `pip install python-time`
+
 
 ## Cara Menjalankan Program
 
 1. Pastikan sudah melakukan kompilasi pada program
-2. Jalankan program GUI.py pada ../src atau jalankan command??
+2. Jalankan program GUI.py pada ../src
 3. Jika berhasil dilakukan kompilasi akan muncul pop-up GUI
+4. Masukkan folder dataset dan test image pada button tertera
+5. Tekan START
+6. Tunggu hinga gambar hasil pencarian muncul
 
 ## Pembagian Tugas
 
@@ -66,12 +72,7 @@ Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenfa
 | ------------------------------- | -------------------------------------------------------------------------------- |
 | 13521077 Husnia Munzayana       | Ekstraksi gambar<br>Pemrosesan training image<br>Laporan Bab 1, 2, 3, 5          |
 | 13521084 Austin Gabriel Pardosi | GUI<br> Laporan Bab 3                                                            |
-| 13521088 Puti Nabilla Aidira    | Pemrosesan training image<br>Proses pengenalan test image<br> Laporan Bab 3, 4 4 |
-
-## Daftar Fitur
-
-1. Inisiasi
-2. 
+| 13521088 Puti Nabilla Aidira    | Pemrosesan training image<br>Proses pengenalan test image<br> Laporan Bab 3, 4   |
 
 ## Status Pengerjaan
 
@@ -86,6 +87,7 @@ Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenfa
 ```bash
 └───Algeo02-21077
     ├───src
+    │   ├───GUI/test_images
     │   ├───GUI.py
     │   ├───imageExt.py
     │   └───eigenFace.py
@@ -93,5 +95,5 @@ Eigenface Face Recognition adalah program pengenalan wajah dengan metode eigenfa
     │   ├───dataset
     │   ├───res.png
     │   └───queryface.jpg
-    └───??
+    └───README.md
 ```
